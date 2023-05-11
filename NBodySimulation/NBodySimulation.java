@@ -14,15 +14,17 @@ public class NBodySimulation
 	{
 		this.fileName = nameOfFile;
 		Scanner file = new Scanner(new File(fileName));
-		while (file.hasNextLine()){
-			numBodies = file.nextInt();
-			uRadius = file.nextDouble();
-			this.bodies = new Body[numBodies];
-			for (int j = 0; j < this.bodies.length; j++){
-				while (file.hasNext()){
-					this.bodies[j] = new Body(file.nextDouble(), file.nextDouble(), file.nextDouble(), file.nextDouble(), file.nextDouble(), file.next());
-				}
-			}
+		numBodies = Integer.parseInt(file.nextLine());
+		uRadius = Double.parseDouble(file.nextLine());
+		this.bodies = new Body[numBodies];
+		for (int i = 0; i < numBodies; i++){
+			double x = file.nextDouble();
+			double y = file.nextDouble();
+			double xVelocity = file.nextDouble();
+			double yVelocity = file.nextDouble();
+			double mass = file.nextDouble();
+			String image = file.next();
+			bodies[i] = new Body(x, y, xVelocity, yVelocity, mass, image);
 		}
 		initCanvas();
 	}
@@ -46,11 +48,13 @@ public class NBodySimulation
 		for (int i = 0; i < T; i += dt){
 			for (int j = 0; j < bodies.length; j++){
 				bodies[j].setNetForce(bodies);
-				bodies[j].update(dt);
-				StdDraw.picture(0, 0, "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/NBodySimulation/Visuals/starfield.jpg");
-				bodies[j].draw();
-				StdDraw.show(10); 
+				bodies[j].update(dt); 
 			}
+			StdDraw.picture(0, 0, "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/NBodySimulation/Visuals/starfield.jpg");
+			for (Body b: bodies){
+				b.draw();
+			}
+			StdDraw.show(10);
 		}
 	}
 }

@@ -35,16 +35,18 @@ public class Body {
   }
 
   public double getPairwiseForceX(Body other){
-	double theta = other.getX() - this.x / getDistance(other);
+	double theta = (other.getX() - this.x) / getDistance(other);
 	return getPairwiseForce(other) * Math.cos(theta);
   }
   public double getPairwiseForceY(Body other){
-	double theta = other.getY() - this.y / getDistance(other);
+	double theta = (other.getY() - this.y) / getDistance(other);
 	return getPairwiseForce(other) * Math.sin(theta);
   }
 
   /** calculates / sets the net force exerted on this body by all the (input) bodies */
   public void setNetForce(Body[] bodies) {
+	this.xNetForce = 0;
+	this.yNetForce = 0;
     for (int i = 0; i < bodies.length; i++){
 		if (this == bodies[i]){
 			continue;
@@ -58,8 +60,8 @@ public class Body {
 
   /** updates this body's accel, vel, and position, given the time step */
   public void update(double dt) {
-    this.xAccel += this.xNetForce / this.mass;
-	this.yAccel += this.yNetForce / this.mass;
+    this.xAccel = this.xNetForce / this.mass;
+	this.yAccel = this.yNetForce / this.mass;
 	this.xVelocity += this.xAccel * dt;
 	this.yVelocity += this.yAccel *  dt;
 	this.x += this.xVelocity * dt;
