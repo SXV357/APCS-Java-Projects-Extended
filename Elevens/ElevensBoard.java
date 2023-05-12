@@ -34,6 +34,7 @@ public class ElevensBoard extends Board {
 	 * @return true if the selected cards form a valid group for removal;
 	 *         false otherwise.
 	 */
+	@Override
 	public boolean isLegal(List<Integer> selectedCards) {
 		if ((selectedCards.size() == 2 && containsPairSum(selectedCards)) || (selectedCards.size() == 3 && super.containsJQK(selectedCards))){
 			return true;
@@ -49,6 +50,7 @@ public class ElevensBoard extends Board {
 	 * @return true if there is a legal play left on the board;
 	 *         false otherwise.
 	 */
+	@Override
 	public boolean anotherPlayIsPossible() {
 		if ((super.getCards().length == 2 && super.getCards()[0].pointValue() + super.getCards()[1].pointValue() == 11) || (super.getCards().length== 3 && Arrays.asList(super.getCards()).containsAll(Arrays.asList("jack", "queen", "king")))){
 			return true;
@@ -64,6 +66,7 @@ public class ElevensBoard extends Board {
 	 * @return true if the board entries in selectedCards
 	 *              contain an 11-pair; false otherwise.
 	 */
+	@Override
 	public boolean containsPairSum(List<Integer> selectedCards) {
 		for (int i = 0; i < selectedCards.size(); i++){
 			for (int j = i + 1; j <= selectedCards.size(); j++){
