@@ -1,5 +1,7 @@
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * The ElevensBoard class represents the board in a game of Elevens.
@@ -52,7 +54,8 @@ public class ElevensBoard extends Board {
 	 */
 	@Override
 	public boolean anotherPlayIsPossible() {
-		if ((super.getCards().length == 2 && super.getCards()[0].pointValue() + super.getCards()[1].pointValue() == 11) || (super.getCards().length== 3 && Arrays.asList(super.getCards()).containsAll(Arrays.asList("jack", "queen", "king")))){
+		Collection<?> face = new ArrayList<String>(Arrays.asList("jack", "queen", "king"));
+		if ((super.getCards().length == 2 && super.getCards()[0].pointValue() + super.getCards()[1].pointValue() == 11) || (super.getCards().length== 3 && Arrays.asList(super.getCards()).containsAll(face))){
 			return true;
 		}
 		return false;

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-import java.net.URL;
+// import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -264,9 +264,9 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 * @return String representation of the image
 	 */
 	private String imageFileName(Card c, boolean isSelected) {
-		String str = "cards/";
+		String str = "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/Elevens/Cards/";
 		if (c == null) {
-			return "cards/back1.GIF";
+			return "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/Elevens/Cards/back1.GIF";
 		}
 		str += c.rank() + c.suit();
 		if (isSelected) {
