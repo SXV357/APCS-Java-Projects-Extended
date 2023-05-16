@@ -33,7 +33,9 @@ public class StudentTester
 			int id = rand.nextInt(900000) + 100000;
 			students.add(new Student(name, id));
 		}
-		// Sort students using selection sort
+	}
+
+	public static void selectionSort(ArrayList<Student> students){
 		for (int i = 0; i < students.size() - 1; i++){
 			int currentIndex = i;
 			for (int j = i+1; j < students.size(); j++){
@@ -45,7 +47,9 @@ public class StudentTester
 			students.set(currentIndex, students.get(i));
 			students.set(i, temp);
 		}
-		// Sort students using insertion sort
+	}
+
+	public static void insertionSort(ArrayList<Student> students){
 		for (int i = 1; i < students.size(); i++){
 			String current = students.get(i).getName();
 			int j = i - 1;
@@ -56,5 +60,23 @@ public class StudentTester
 			students.set(j + 1, students.get(i));
 		}
 		System.out.println(students);
+	}
+
+	public static int indexOf(ArrayList<Student> entries, Student s){
+		int low = 0;
+		int high = entries.size() - 1;
+		while (low < high){
+			int middle = (low + high) / 2;
+			if (entries.get(middle).compareTo(s) == 0){
+				return middle;
+			}
+			if (entries.get(middle).compareTo(s) < 0){
+				high = middle - 1;
+			}
+			if (entries.get(middle).compareTo(s) > 0){
+				low = middle + 1;
+			}
+		}
+		return -1;
 	}
 }
