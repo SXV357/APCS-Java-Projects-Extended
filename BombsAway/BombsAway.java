@@ -22,9 +22,19 @@ public class BombsAway
         StdDraw.setPenColor(new Color(255, 0, 0));
         for (int i = 0; i < bombs.size(); i++){
             if (bombs.get(i).intersects(StdDraw.mouseX(), StdDraw.mouseY())){
-                StdDraw.line(0.0, 0.0, StdDraw.mouseX(), StdDraw.mouseY());
-                bombs.remove(i);
-                this.score++;
+                if (bombs.get(i).isSplitter()){
+                    StdDraw.line(0.0, 0.0, StdDraw.mouseX(), StdDraw.mouseY());
+                    bombs.remove(i);
+                    Bomb bomblet1 = new Bomb(bombs.get(i), bombs.get(i).getRadius());
+                    Bomb bomblet2 = new Bomb(bombs.get(i), -1 * bombs.get(i).getRadius());
+                    bombs.add(bomblet1); bombs.add(bomblet2);
+                    this.score++;
+                }
+                else {
+                    StdDraw.line(0.0, 0.0, StdDraw.mouseX(), StdDraw.mouseY());
+                    bombs.remove(i);
+                    this.score++;
+                }
             }
         }
     }
@@ -33,21 +43,24 @@ public class BombsAway
             if (StdDraw.hasNextKeyTyped()){
                 if (StdDraw.nextKeyTyped() == ' '){
                     StdDraw.setPenColor(new Color(255, 114, 118));  
-                    StdDraw.filledSquare(0.5, 0.5, 256.0);  
+                    StdDraw.filledSquare(0.5, 0.5, 256.0); // takes up entire canvas width
                     StdDraw.show(100);
-                    score += bombs.size();
+                    for (int j = 0; j < bombs.size(); j++){
+                        this.score += bombs.get(j).isSplitter() ? 3 : 1; // if the bomb is a splitter, there's one point for destroying the first one and two more for the two bomblets
+                    }
                     bombs.clear();   
                 }
             }
         }
     }
     void updateScore(){
-        String score = "Score:" + String.valueOf(this.score) + (this.score == 10 ? "*" : "");
+        String stats = "Score:" + String.valueOf(this.score) + (this.score == 10 ? "*" : "") + "," + "Lives: " + String.valueOf(this.lives);
         StdDraw.setFont(new Font("SansSerif", Font.BOLD, 18));
         StdDraw.setPenColor(new Color(255, 0, 0));
-        StdDraw.textLeft(0, 1, score);
+        StdDraw.textLeft(0, 1, stats);
     }
-    void play(){}
+    void play(){
+    }
     void update(){}
 }
 

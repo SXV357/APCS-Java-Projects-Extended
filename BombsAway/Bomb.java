@@ -31,12 +31,13 @@ public class Bomb
 		
 	public void draw()
 	{
+		Color bombColor = null;
 		int initialStrength = strength;
 		int remainingStrength = attack();
-		Color bombColor = new Color(255 * (1 - remainingStrength/initialStrength), 0, (int) 255 * remainingStrength/initialStrength);
+		// remaining < initial if bomb is attacked and if not starts off with blue
+		bombColor = remainingStrength < initialStrength ? new Color(255 * (1 - remainingStrength/initialStrength), 0, (int) 255 * remainingStrength/initialStrength) : new Color(0, 0, 255);
 		StdDraw.setPenColor(bombColor);
 		StdDraw.filledCircle(xLocation, yLocation, radius);
-
 	}
 
 	public void updatePos(){yLocation += yVelocity;}
