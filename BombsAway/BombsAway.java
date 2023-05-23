@@ -9,6 +9,10 @@ public class BombsAway
     private int score;
 
     public BombsAway(){
+        StdDraw.setCanvasSize();
+        StdDraw.setXscale();
+        StdDraw.setYscale();
+        StdDraw.picture(0.5, 0.5, "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/BombsAway/mcommand.jpg");  
         this.bombs = new ArrayList<Bomb>();
         this.lives = 3;
         this.score = 0;
@@ -28,7 +32,7 @@ public class BombsAway
         if (this.score == 10){
             if (StdDraw.hasNextKeyTyped()){
                 if (StdDraw.nextKeyTyped() == ' '){
-                    StdDraw.setPenColor(new Color(255, 0, 0));  
+                    StdDraw.setPenColor(new Color(255, 114, 118));  
                     StdDraw.filledSquare(0.5, 0.5, 256.0);  
                     StdDraw.show(100);
                     score += bombs.size();
@@ -37,7 +41,12 @@ public class BombsAway
             }
         }
     }
-    void updateScore(){}
+    void updateScore(){
+        String score = "Score:" + String.valueOf(this.score) + (this.score == 10 ? "*" : "");
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 18));
+        StdDraw.setPenColor(new Color(255, 0, 0));
+        StdDraw.textLeft(0, 1, score);
+    }
     void play(){}
     void update(){}
 }
