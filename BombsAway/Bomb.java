@@ -34,8 +34,12 @@ public class Bomb
 		Color bombColor = null;
 		int initialStrength = strength;
 		int remainingStrength = attack();
-		// remaining < initial if bomb is attacked and if not starts off with blue
-		bombColor = remainingStrength < initialStrength ? new Color(255 * (1 - remainingStrength/initialStrength), 0, (int) 255 * remainingStrength/initialStrength) : new Color(0, 0, 255);
+		if (remainingStrength == initialStrength){
+			bombColor = new Color(0,0,255);
+		}
+		else if (remainingStrength < initialStrength && initialStrength != 0){
+			bombColor = new Color(255 * (1 - remainingStrength/initialStrength), 0, (int) 255 * remainingStrength/initialStrength);
+		}
 		StdDraw.setPenColor(bombColor);
 		StdDraw.filledCircle(xLocation, yLocation, radius);
 	}
@@ -50,7 +54,9 @@ public class Bomb
  
 	public int attack()
 	{
-		strength--;
+		if (intersects(StdDraw.mouseX(), StdDraw.mouseY())){
+			strength--;
+		}
 		return strength;
 	}
 	
