@@ -5,8 +5,8 @@ public class Game
 	static final int STARTING_SPEED = 50;
 	
 	private GridDisplay display; //GUI class
-	private Block       block;   //current block on screen, controlled by player
-	private int         speed;   //sleep duration, for controlling game speed
+	private Block block;   //current block on screen, controlled by player
+	private int speed;   //sleep duration, for controlling game speed
 
 	/** make a new game starting at the default speed */
 	public Game()
@@ -35,22 +35,22 @@ public class Game
 				int key = display.checkLastKeyPressed(); 
 				
 				if (key == 37) { 
-					//left arrow pressed
+					this.block.shift(0, -1);
 				}				
 				
 				else if (key == 38) {
-					//up arrow pressed
+					this.block.rotate();
 				}
 				
 				else if (key == 39) {
-					//right arrow pressed
+					this.block.shift(0, 1);
 				}
 				
 				else if (key == 40) {
-					//down arrow pressed
+					this.block.shift(1, 0);
 				}
-			} //end for loop
-		} //end while loop
+			}
+		}
 	}
 
 	public boolean isCompletedRow(int row)
