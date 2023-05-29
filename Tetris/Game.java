@@ -19,7 +19,6 @@ public class Game
 		this.speed   = speed;
 		this.display = new GridDisplay(20, 10);
 		this.block   = new Block(display);
-		
 		this.display.setTitle("Tetris");
 		this.display.setLineColor(Color.BLACK);
 	}
@@ -33,6 +32,12 @@ public class Game
 				display.pause(speed);
 				
 				int key = display.checkLastKeyPressed(); 
+
+				if (key == 32){
+					while (this.block.shift(1, 0)){
+						display.pause(20);
+					}
+				}
 				
 				if (key == 37) { 
 					this.block.shift(0, -1);
@@ -50,28 +55,45 @@ public class Game
 					this.block.shift(1, 0);
 				}
 			}
+			boolean res = this.block.shift(1, 0);
+			if (!res){
+				removeCompletedRows();
+				this.block = new Block(this.display);
+			}
 		}
 	}
 
 	public boolean isCompletedRow(int row)
 	{
-		//TODO
-		
-		return false; //replace
+		for (int i = 0; i < this.display.getNumCols(); i++){
+			if (this.display.getColor(new Location(row, i)).equals(Color.BLACK)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void removeSquare(Location loc) 
 	{
-		//TODO
+		for (int i = loc.getRow(); i > 0; i--){
+			this.display.setColor(new Location(i, loc.getCol()), this.display.getColor(new Location(i - 1, loc.getCol())));
+		}
+		this.display.setColor(new Location(0, loc.getCol()), Color.BLACK);
 	}
 
 	public void removeRow(int row) 
 	{
-		//TODO
+		for (int j = 0; j < this.display.getNumCols(); j++){
+			removeSquare(new Location(row, j));
+		}
 	}
 
 	public void removeCompletedRows() 
 	{
-		//TODO
+		for (int k = 0; k < this.display.getNumRows(); k++){
+			if (isCompletedRow(k)){
+				removeRow(k);
+			}
+		}
 	}
 }
