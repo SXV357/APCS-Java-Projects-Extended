@@ -204,7 +204,6 @@ public class GridDisplay extends JComponent implements KeyListener, MouseListene
 						Image image = new ImageIcon(url).getImage();
 						int width = image.getWidth(null);
 						int height = image.getHeight(null);
-						int max;
 						if (width > height)
 						{
 							int drawHeight = cellSize * height / width;
