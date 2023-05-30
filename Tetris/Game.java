@@ -9,33 +9,37 @@ public class Game {
   private int speed; //sleep duration, for controlling game speed
   private int score;
 
-  /** make a new game starting at the default speed */
   public Game() {
-    this(STARTING_SPEED);
-    this.score = 0;
-  }
-
-  public Game(int speed) {
-	this.speed = speed;
+	this.score = 0;
+	this.speed = this.determineSpeed();
     this.display = new GridDisplay(20, 10);
     this.block = new Block(display);
-    this.display.setTitle("Tetris - Score: " + this.score);
+    this.display.setTitle("Tetris - Score: " + score);
     this.display.setLineColor(Color.BLACK);
+  }
+
+  public int determineSpeed(){
+	int controllingSpeed = 0;
+	switch (this.score){
+		case 0: controllingSpeed = STARTING_SPEED; break;
+		case 10: controllingSpeed = 60; break;
+		case 20: controllingSpeed = 75; break;
+		case 30: controllingSpeed = 90; break;
+		case 40: controllingSpeed = 95; break;
+		case 50: controllingSpeed = 100; break;
+	}
+	return controllingSpeed;
   }
 
   public void play() {
     while (true) {
       for (int i = 0; i < 10; i++) { //loop to process 10 key presses in 10*speed (0.5 seconds at default speed)
-        display.pause(speed);
-
-        int key = display.checkLastKeyPressed();
+        this.display.pause(speed);
+        int key = this.display.checkLastKeyPressed();
 
         if (key == 32) { // space bar
-          while (this.block.shift(1, 0)) {
-            display.pause(10);
-          }
+          while (this.block.shift(1, 0)) {display.pause(10);}
         }
-
         if (key == 37) { // left arrow
           this.block.shift(0, -1);
         } else if (key == 38) { // up arrow
@@ -49,7 +53,7 @@ public class Game {
       if (!checkGameOver()) {
         boolean res = this.block.shift(1, 0);
         if (!res) {
-          removeCompletedRows();
+          this.removeCompletedRows();
           this.block = new Block(this.display);
         }
       } else {
@@ -97,15 +101,15 @@ public class Game {
 
   public void removeRow(int row) {
     for (int j = 0; j < this.display.getNumCols(); j++) {
-      removeSquare(new Location(row, j));
+      this.removeSquare(new Location(row, j));
     }
   }
 
   public void removeCompletedRows() {
     for (int k = 0; k < this.display.getNumRows(); k++) {
-      if (isCompletedRow(k)) {
-        this.score++;
-        removeRow(k);
+      if (this.isCompletedRow(k)) {
+        this.removeRow(k);
+		this.score++;
       }
     }
   }
