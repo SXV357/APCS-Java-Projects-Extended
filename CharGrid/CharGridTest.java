@@ -4,8 +4,8 @@ public class CharGridTest
 	public static void main(String[] args) 
 	{
 		CharGridTest.testCharArea01(); System.out.println();
-		// CharGridTest.testCharArea02(); System.out.println();
-		// CharGridTest.testCountPlus01();
+		CharGridTest.testCharArea02(); System.out.println();
+		CharGridTest.testCountPlus01();
 	}
 	
 	public static void testCharArea01()
