@@ -30,6 +30,7 @@
  import java.util.TreeSet;
  import javax.imageio.ImageIO;
  import javax.swing.*;
+ import java.awt.Color;
  
  /**
   *  <i>Standard draw</i>. This class provides a basic capability for
