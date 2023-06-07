@@ -13,11 +13,11 @@ public class White {
         while (election.hasNextLine()){
             String[] data = election.nextLine().split(",");
             String[] voteSubset = Arrays.copyOfRange(data, 1, data.length);
-
+            
             double ratioSum = Double.parseDouble(voteSubset[0]) + Double.parseDouble(voteSubset[1]) + Double.parseDouble(voteSubset[2]);
             int red = (int) Math.round((Double.parseDouble(voteSubset[0]) / ratioSum) * 255);
-            int green = (int) Math.round((Double.parseDouble(voteSubset[1]) / ratioSum) * 255);
-            int blue = (int) Math.round((Double.parseDouble(voteSubset[2]) / ratioSum) * 255);
+            int green = (int) Math.round((Double.parseDouble(voteSubset[2]) / ratioSum) * 255);
+            int blue = (int) Math.round((Double.parseDouble(voteSubset[1]) / ratioSum) * 255);
             purple.put(data[0], new Color(red, green, blue));
             
             Color majority = null;
