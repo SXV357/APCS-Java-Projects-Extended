@@ -1,5 +1,5 @@
 package NumberList;
-
+import java.util.ArrayList;
 public class NumberListRunner {
     public static void main(String[] args) 
 	{
@@ -53,5 +53,79 @@ public class NumberListRunner {
 		
 		list.add(0, 72); list.add(2, 65);
 		System.out.println(list);
+		System.out.println();
+
+		NumberList primes = new NumberList();
+		for (int i = 0; i < 1000000; i++){
+			if (isPrime(i)){
+				primes.add(i);
+			}
+		}
+		int maxTerms = Integer.MIN_VALUE; int res = 0;
+		for (int x = 0; x < primes.size(); x++){
+			int sum = primes.get(x);
+			int termsSummed = 1;
+			for (int y = x + 1; y < primes.size(); y++){
+				sum += primes.get(y);
+				termsSummed++;
+
+				if (sum > 1000000){
+					break;
+				}
+
+				if (isPrime(sum) && termsSummed > maxTerms){
+					maxTerms = termsSummed;
+					res = sum;
+				}
+			}
+		}
+		System.out.println("The greatest number below 1 million that can be written as the sum of " + maxTerms +  " consecutive primes is: " + res);
+
+		ArrayList<Integer> abundantNumbers = generateAbundantNumbers();
+		ArrayList<Integer> excludedList = new ArrayList<Integer>();
+		for (int i = 0; i < 28123; i++){
+			for (int j = 0; j < abundantNumbers.size(); j++){
+				for (int k = j + 1; k < abundantNumbers.size(); k++){
+					if (!(abundantNumbers.get(j) + abundantNumbers.get(k) == i)) // the number between 0 and 28123 cannot be expressed as the sum of two abundant numbers
+					{
+						excludedList.add(i);
+					}
+				}
+			}
+		}
+		int excludedSum = 0;
+		for (int excludedNum: excludedList) {excludedSum += excludedNum;}
+		System.out.println("Sum of all positive integers less than 28123 that cannot be expressed as the sum of two abundant numbers equals " + excludedSum);
+	}
+
+	public static ArrayList<Integer> generateAbundantNumbers(){
+		ArrayList<Integer> abundant = new ArrayList<Integer>();
+		for (int i = 1; i < 100000; i++){
+			ArrayList<Integer> factors = new ArrayList<Integer>();
+			int current = i;
+			for (int j = 1; j < i; j++){
+				if (current % j == 0){
+					factors.add(j);
+				}
+			}
+			int factorSum = 0;
+			for (int factor: factors) {factorSum += factor;}
+			if (factorSum > current){
+				abundant.add(current);
+			}
+		}
+		return abundant;
+	}
+
+	public static boolean isPrime(int n){
+		if (n == 0 || n == 1){
+			return false;
+		}
+		for (int i = 2; i < n; i++){
+			if (n % i == 0){
+				return false;
+			}
+		}
+		return true;
 	}
 }
