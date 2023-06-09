@@ -84,13 +84,20 @@ public class NumberListRunner {
 		ArrayList<Integer> abundantNumbers = generateAbundantNumbers();
 		ArrayList<Integer> excludedList = new ArrayList<Integer>();
 		for (int i = 0; i < 28123; i++){
+			boolean cannotBeExpressed = false;
 			for (int j = 0; j < abundantNumbers.size(); j++){
 				for (int k = j + 1; k < abundantNumbers.size(); k++){
-					if (!(abundantNumbers.get(j) + abundantNumbers.get(k) == i)) // the number between 0 and 28123 cannot be expressed as the sum of two abundant numbers
-					{
-						excludedList.add(i);
+					if (abundantNumbers.get(j) + abundantNumbers.get(k) == i){
+						cannotBeExpressed = true;
+						break;
 					}
 				}
+				if (cannotBeExpressed){
+					break;
+				}
+			}
+			if (!(cannotBeExpressed)){
+				excludedList.add(i);
 			}
 		}
 		int excludedSum = 0;
