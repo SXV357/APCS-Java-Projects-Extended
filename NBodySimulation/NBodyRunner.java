@@ -1,7 +1,6 @@
 import java.io.FileNotFoundException;
-// import java.io.IOException;
 
-public class Runner 
+public class NBodyRunner 
 {
 	public static void main(String[] args) throws FileNotFoundException
 	{
@@ -9,7 +8,7 @@ public class Runner
 		
 		final double dt = 25_000; //time step in seconds, one day
 		
-		final String fileName = "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/NBodySimulation/planets.txt";
+		final String fileName = "/Users/shreyasviswanathan/Desktop/Programming/Java Projects/APCS-Java-Projects-Extended/NBodySimulation/planets.txt";
 		
 		NBodySimulation sim = new NBodySimulation(fileName);
 				

@@ -22,6 +22,10 @@ public class Body {
     this.yAccel = 0;
   }
 
+  public String toString(){
+    return "X-coordinate: " + this.x + ", Y-Coordinate: " + this.y + ", X-Velocity: " + this.xVelocity + ", Y-Velocity: " + this.yVelocity + ", Mass: " + this.mass + ", Image File Path: " + this.image;
+  }
+
   public double getX(){return this.x;}
   public double getY(){return this.y;}
   public double getMass(){return this.mass;}
@@ -35,38 +39,38 @@ public class Body {
   }
 
   public double getPairwiseForceX(Body other){
-	double theta = (other.getX() - this.x) / getDistance(other);
-	return getPairwiseForce(other) * Math.cos(theta);
+	double dx = other.getX() - this.x;
+  double dy = other.getY() - this.y;
+  double theta = Math.atan2(dy, dx);
+  return getPairwiseForce(other) * Math.cos(theta);
   }
   public double getPairwiseForceY(Body other){
-	double theta = (other.getY() - this.y) / getDistance(other);
-	return getPairwiseForce(other) * Math.sin(theta);
+  double dx = other.getX() - this.x;
+  double dy = other.getY() - this.y;
+  double theta = Math.atan2(dy, dx);
+  return getPairwiseForce(other) * Math.sin(theta);
   }
 
   /** calculates / sets the net force exerted on this body by all the (input) bodies */
   public void setNetForce(Body[] bodies) {
-	this.xNetForce = 0;
-	this.yNetForce = 0;
-    for (int i = 0; i < bodies.length; i++){
-		if (this == bodies[i]){
-			continue;
-		}
-		else {
-			this.xNetForce += this.getPairwiseForceX(bodies[i]);
-			this.yNetForce += this.getPairwiseForceY(bodies[i]);
-		}
-	}
+  this.xNetForce = 0;
+  this.yNetForce = 0;
+  for (int i = 0; i < bodies.length; i++) {
+    if (bodies[i] != this) {
+      this.xNetForce += getPairwiseForceX(bodies[i]);
+      this.yNetForce += getPairwiseForceY(bodies[i]);
+    }
   }
+}
 
   /** updates this body's accel, vel, and position, given the time step */
   public void update(double dt) {
     this.xAccel = this.xNetForce / this.mass;
-	this.yAccel = this.yNetForce / this.mass;
-	this.xVelocity += this.xAccel * dt;
-	this.yVelocity += this.yAccel *  dt;
-	this.x += this.xVelocity * dt;
-	this.y += this.yVelocity * dt;
-	
+    this.yAccel = this.yNetForce / this.mass;
+    this.xVelocity += this.xAccel * dt;
+    this.yVelocity += this.yAccel *  dt;
+    this.x += this.xVelocity * dt;
+    this.y += this.yVelocity * dt;
   }
 
   /** Draws the body using the StdDraw library file's drawing method */
@@ -77,8 +81,12 @@ public class Body {
 
 class Test{
 	public static void main(String[] args){
-		new Body(0.5, 0.5, 0, 0, 0, "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/NBodySimulation/Visuals/earth.gif").draw();
+		new Body(0.5, 0.5, 0, 0, 0, "/Users/shreyasviswanathan/Desktop/Programming/Java Projects/APCS-Java-Projects-Extended/NBodySimulation/Visuals/earth.gif").draw();
 		System.out.println(new Body(0.5, 0.5, 0, 0, 6E24, "").getDistance(new Body(1, 1, 0, 0, 6E24, "")));
-		System.out.println(new Body(0, 0, 0, 0, 6e24, "").getPairwiseForce(new Body(1, 1, 0, 0, 7e24, "")));
+    Body b1 = new Body(0, 0, 0, 0, 6e24, "");
+    Body b2 = new Body(1, 1, 0, 0, 7e24, "");
+    System.out.println(b1.getPairwiseForce(b2));
+    System.out.println(b1.getPairwiseForceX(b2));
+    System.out.println(b1.getPairwiseForceY(b2));
 	}
 }
