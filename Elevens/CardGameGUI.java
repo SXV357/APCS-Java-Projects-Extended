@@ -264,9 +264,9 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 * @return String representation of the image
 	 */
 	private String imageFileName(Card c, boolean isSelected) {
-		String str = "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/Elevens/Cards/";
+		String str = "/Users/shreyasviswanathan/Desktop/Programming/Java Projects/APCS-Java-Projects-Extended/Elevens/Cards/";
 		if (c == null) {
-			return "C:/Users/14058/OneDrive/Desktop/APCS-Projects-Extended/Elevens/Cards/back1.GIF";
+			return "/Users/shreyasviswanathan/Desktop/Programming/Java Projects/APCS-Java-Projects-Extended/Elevens/Cards/back1.GIF";
 		}
 		str += c.rank() + c.suit();
 		if (isSelected) {
