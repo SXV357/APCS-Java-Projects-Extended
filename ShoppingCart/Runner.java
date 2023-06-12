@@ -1,5 +1,3 @@
-package ShoppingCart;
-
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
