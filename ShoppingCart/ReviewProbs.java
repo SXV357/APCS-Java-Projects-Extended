@@ -149,6 +149,17 @@ public class ReviewProbs {
         else {return generateNthFib(n-1) + generateNthFib(n-2);}
     }
 
+    public static boolean isFib(int n){
+        int index = 0;
+        while (generateNthFib(index) <= n){
+            if (generateNthFib(index) == n){
+                return true;
+            }
+            index++;
+        }
+        return false;
+    }
+
     public static void zeck(String fileName) throws FileNotFoundException{
         Integer[] fibNums = new Integer[20];
         for (int i = 0; i < 20; i++) {
@@ -169,8 +180,46 @@ public class ReviewProbs {
             Integer[] subset = Arrays.copyOfRange(fibNums, 0, index);
             zecker.put(currentNum, subset);
         }
-        for (Integer[] arr: zecker.values()){
-            System.out.println(Arrays.toString(arr));
+        
+        HashMap<Integer, ArrayList<Integer>> pairSum = new HashMap<Integer, ArrayList<Integer>>();
+        for (Integer original: zecker.keySet()){
+            int destination = original; // original element
+            Integer[] subArr = zecker.get(destination); // fibArr associated with that element
+            ArrayList<Integer> partial = new ArrayList<Integer>(); // to add the numbers that add to the original elemnent from subArr
+            int sum = 0;
+            for (int x = subArr.length - 1; x >= 0; x--){
+                // Case 1: Destination is a fibonacci number
+                if (isFib(destination)){
+                    partial.add(subArr[subArr.length - 1]);
+                    break;
+                }
+                // Case 2: Destination is not a fibonacci number
+                else {
+                    int currElem = subArr[x];
+                    partial.add(subArr[subArr.length - 1]);
+                    sum += partial.get(0); // initialize sum to start off with the greatest element less than destination
+                    while (sum < destination) {
+                        int nextElem = subArr[x-1];
+                        if (currElem + nextElem <= destination){
+                            partial.add(nextElem);
+                            sum += nextElem;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                    
+                }
+            }
+            pairSum.put(destination, partial);
+        }
+        for (Integer inputNum: pairSum.keySet()){
+            ArrayList<Integer> zeckerRep = pairSum.get(inputNum);
+            String res = "";
+            for (int i = 0; i < zeckerRep.size(); i++){
+                res += String.valueOf(zeckerRep.get(i)) + " + ";
+            }
+            System.out.println(inputNum + " = " + res);
         }
     }
 }
