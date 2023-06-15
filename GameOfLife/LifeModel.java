@@ -5,10 +5,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.awt.Graphics;
+import java.awt.Color;
 
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class LifeModel implements ActionListener
+public class LifeModel extends JPanel implements ActionListener
 {
 
 	/*
@@ -77,9 +80,37 @@ public class LifeModel implements ActionListener
 		timer.restart();
 	}
 
+	// public void randomizeColor(Graphics g){
+	// 	super.paintComponent(g);
+	// 	for (int i = 0; i < this.grid.length; i++){
+	// 		for (int j = 0; j < this.grid[0].length; j++){
+	// 			if (this.grid[i][j] != null){
+	// 				if (this.grid[i][j].isAliveNow()){
+	// 					int red = (int) Math.random() * 256;
+	// 					int green = (int) Math.random() * 256;
+	// 					int blue = (int) Math.random() * 256;
+	// 					g.setColor(new Color(red, green, blue));
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	myView.updateView(grid);
+	// }
+
 	/** Reset the simulation by placing cells in random locations once again */
 	public void resetSimulation() throws IOException{
-		new LifeModel(this.myView);
+		this.pause();
+		this.timer = null;
+		this.grid = new LifeCell[SIZE][SIZE];
+		for (int r = 0; r < SIZE; r++){
+			for (int c = 0; c < SIZE; c++){
+				grid[r][c] = new LifeCell();
+				if (Math.random() > 0.85){
+					grid[r][c].setAliveNow(true);
+				}
+			}
+		}
+		myView.updateView(grid);
 	}
 	
 	/** run the simulation (the pause button in the GUI */
@@ -101,6 +132,21 @@ public class LifeModel implements ActionListener
 		return (r >= 0 && r < this.grid.length) && (c >= 0 && c < this.grid[0].length);
 	}
 
+	/**The number of occupied neighbors for a given cell irrespective of whether it is alive or not */
+	public int getNumNeighbors(int row, int col){
+		int numNeighbors = 0;
+		for (int i = -1; i <= 1; i++){
+			for (int j = -1; j <= 1; j++){
+				int modifiedRow = row + i;
+				int modifiedCol = col + j;
+				if (this.isValid(modifiedRow, modifiedCol) && (modifiedRow != row || modifiedCol != col)){
+					numNeighbors += this.grid[modifiedRow][modifiedCol].isAliveNow() ? 1 : 0;
+				}
+			}
+		}
+		return numNeighbors;
+	}
+
 	/** main logic method for updating the state of the grid / simulation */
 	private void oneGeneration()
 	{
@@ -112,81 +158,33 @@ public class LifeModel implements ActionListener
 
 		// If an unoccupied(isAliveNow = false) cell has three occupied(isAliveNow = true) neighbors, it becomes occupied(setAliveNext(true))
 
-		// deal with occupied cells first
-		int numNeighbors = 0;
-		for (int r = 0; r < this.grid.length; r++){
-			for (int c = 0; c < this.grid[0].length; c++){
-				// if the current cell is valid and occupied
-				if (this.isValid(r, c) && this.grid[r][c].isAliveNow()){
-					if (r == 0){
-						// top corners and anything along
-						if (c == 0){
-							if (this.grid[r][c + 1].isAliveNow() || this.grid[r+1][c].isAliveNow() || this.grid[r+1][c+1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-						else if (c == this.grid[0].length - 1){
-							if (this.grid[r][c-1].isAliveNow() || this.grid[r+1][c].isAliveNow() || this.grid[r+1][c-1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-						else {
-							if (this.grid[r+1][c-1].isAliveNow() || this.grid[r+1][c].isAliveNow() || this.grid[r+1][c+1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
+		for (int x = 0; x < this.grid.length; x++){
+			for (int y = 0; y < this.grid[0].length; y++){
+				int neighbors = this.getNumNeighbors(x, y);
+				if (this.grid[x][y].isAliveNow()){
+					if (neighbors == 0 || neighbors == 1 || neighbors == 4 || neighbors == 5 || neighbors == 6 || neighbors == 7 || neighbors == 8){
+						this.grid[x][y].setAliveNext(false);
 					}
-					else if (r == this.grid.length - 1){
-						// bottom corners and anything along
-						if (c == 0){
-							if (this.grid[r-1][c].isAliveNow() || this.grid[r-1][c+1].isAliveNow() || this.grid[r][c+1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-						else if (c == this.grid[0].length - 1){
-							if (this.grid[r-1][c].isAliveNow() || this.grid[r-1][c-1].isAliveNow() || this.grid[r][c-1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-						else {
-							if (this.grid[r-1][c-1].isAliveNow() || this.grid[r-1][c].isAliveNow() || this.grid[r-1][c+1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-					}
-					else if (c == 0){
-						if (!(r == 0 || r == this.grid.length - 1)){
-							if (this.grid[r-1][c+1].isAliveNow() || this.grid[r][c+1].isAliveNow() || this.grid[r+1][c+1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-					}
-					else if (c == this.grid[0].length - 1){
-						if (!(r == 0 || r == this.grid.length - 1)){
-							if (this.grid[r-1][c-1].isAliveNow() || this.grid[r][c-1].isAliveNow() || this.grid[r+1][c-1].isAliveNow()){
-								numNeighbors++;
-							}
-						}
-					}
-					else { // any other location in the grid apart from 1st/last row or 1st/last column
-						if (this.grid[r-1][c-1].isAliveNow() || this.grid[r-1][c].isAliveNow() || this.grid[r-1][c+1].isAliveNow()
-						 || this.grid[r][c-1].isAliveNow() || this.grid[r][c+1].isAliveNow() || this.grid[r+1][c-1].isAliveNow()
-						 || this.grid[r+1][c].isAliveNow() || this.grid[r+1][c+1].isAliveNow()){
-							numNeighbors++;
-						 }
+					else{
+						this.grid[x][y].setAliveNext(true);
 					}
 				}
-				// if the current cell is valid but not occupied
-				else if (this.isValid(r, c) && !(this.grid[r][c].isAliveNow())){
-
-				}
-				if (numNeighbors == 0 || numNeighbors == 1 || numNeighbors == 4 || numNeighbors == 5 ||  numNeighbors == 6 || numNeighbors == 7 || numNeighbors == 8){
-					this.grid[r][c].setAliveNext(false);
-				}
-				else if (numNeighbors == 2 || numNeighbors == 3){
-					this.grid[r][c].setAliveNext(true);
+				else {
+					if (neighbors == 3){
+						this.grid[x][y].setAliveNext(true);
+					}
+					else {
+						this.grid[x][y].setAliveNext(false);
+					}
 				}
 			}
 		}
-	}
+
+		// update aliveNow to reflect aliveNext
+		for (int j = 0; j < this.grid.length; j++){
+			for (int k = 0; k < this.grid[0].length; k++){
+				this.grid[j][k].setAliveNow(this.grid[j][k].isAliveNext());
+			}
+		}
+}
 }

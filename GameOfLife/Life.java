@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
+// import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -23,6 +24,8 @@ class Life extends JFrame implements ActionListener
 	private LifeView view;
 	private LifeModel model;
 	private JButton runButton, pauseButton, resumeButton, resetButton, randomColorButton;
+	private boolean switchText;
+	// private Graphics g;
 
 	/** construct a randomized starting grid */
 	Life() throws IOException
@@ -34,6 +37,7 @@ class Life extends JFrame implements ActionListener
 	Life(String fileName) throws IOException
 	{
 		super("Conway's Life");
+		this.switchText = false;
 
 		// build the buttons
 		JPanel controlPanel = 
@@ -58,7 +62,7 @@ class Life extends JFrame implements ActionListener
 		resetButton.setEnabled(false);
 		controlPanel.add(resetButton);
 
-		randomColorButton = new JButton("Randomize Color");
+		randomColorButton = new JButton(this.switchText ? "Reset Color" : "Randomize Color");
 		randomColorButton.addActionListener(this);
 		randomColorButton.setEnabled(false);
 		controlPanel.add(randomColorButton);
@@ -121,11 +125,18 @@ class Life extends JFrame implements ActionListener
 
 		else if ( b == randomColorButton){
 			// randomize colors
+			this.setTextStatus(!this.switchText);
+			// model.randomizeColor(this.g);
 			runButton.setEnabled(false);
 			pauseButton.setEnabled(true);
-			resumeButton.setEnabled(false);
+			resumeButton.setEnabled(true);
 			resetButton.setEnabled(true);
 		}
+	}
+
+	public void setTextStatus(boolean state){
+		this.switchText = state;
+		randomColorButton.setText(this.switchText ? "Reset Color" : "Randomize Color");
 	}
 	
 	public static void main(String[] args) throws IOException
