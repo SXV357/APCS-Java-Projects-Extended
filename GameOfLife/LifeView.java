@@ -1,6 +1,8 @@
 package GameOfLife;
 
 import java.awt.*;
+import java.io.IOException;
+
 import javax.swing.*;
 
 /** The view (graphical) component */
@@ -11,6 +13,7 @@ public class LifeView extends JPanel
 
 	/** store a reference to the current state of the grid */
     private LifeCell[][] grid;
+    private LifeModel model;
 
     public LifeView()
     {
@@ -21,6 +24,7 @@ public class LifeView extends JPanel
     public void updateView( LifeCell[][] mg )
     {
         grid = mg;
+        if (this.model != null) {this.model.randomizeColor(getGraphics());}
         repaint();
     }
 
@@ -38,11 +42,13 @@ public class LifeView extends JPanel
             {
                 if (grid[r][c] != null)
                 {
-                    if ( grid[r][c].isAliveNow() )
-                        g.setColor( Color.BLUE );
-                    else
+                    if (this.model != null) {this.model.randomizeColor(g);}
+                    if (grid[r][c].isAliveNow()){
+                        g.setColor(Color.BLUE);
+                    }
+                    else{
                         g.setColor( new Color(235,235,255) );
-
+                    }
                     g.fillRect( (c+1)*boxSize, (r+1)* boxSize, boxSize-2, boxSize-2);
                 }
             }

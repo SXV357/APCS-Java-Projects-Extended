@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
-// import java.awt.Graphics;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -25,7 +25,7 @@ class Life extends JFrame implements ActionListener
 	private LifeModel model;
 	private JButton runButton, pauseButton, resumeButton, resetButton, randomColorButton;
 	private boolean switchText;
-	// private Graphics g;
+	private Graphics g;
 
 	/** construct a randomized starting grid */
 	Life() throws IOException
@@ -38,6 +38,7 @@ class Life extends JFrame implements ActionListener
 	{
 		super("Conway's Life");
 		this.switchText = false;
+		this.g = getGraphics();
 
 		// build the buttons
 		JPanel controlPanel = 
@@ -62,7 +63,7 @@ class Life extends JFrame implements ActionListener
 		resetButton.setEnabled(false);
 		controlPanel.add(resetButton);
 
-		randomColorButton = new JButton(this.switchText ? "Reset Color" : "Randomize Color");
+		randomColorButton = new JButton(this.switchText ? "Mono Color" : "Randomize Color");
 		randomColorButton.addActionListener(this);
 		randomColorButton.setEnabled(false);
 		controlPanel.add(randomColorButton);
@@ -126,7 +127,7 @@ class Life extends JFrame implements ActionListener
 		else if ( b == randomColorButton){
 			// randomize colors
 			this.setTextStatus(!this.switchText);
-			// model.randomizeColor(this.g);
+			model.randomizeColor(g);
 			runButton.setEnabled(false);
 			pauseButton.setEnabled(true);
 			resumeButton.setEnabled(true);
@@ -136,8 +137,10 @@ class Life extends JFrame implements ActionListener
 
 	public void setTextStatus(boolean state){
 		this.switchText = state;
-		randomColorButton.setText(this.switchText ? "Reset Color" : "Randomize Color");
+		randomColorButton.setText(this.switchText ? "Mono Color" : "Randomize Color");
 	}
+
+	public boolean getColorStatus(){return this.switchText;}
 	
 	public static void main(String[] args) throws IOException
 	{

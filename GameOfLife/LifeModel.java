@@ -5,13 +5,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.awt.Graphics;
 import java.awt.Color;
-
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.Graphics;
 
-public class LifeModel extends JPanel implements ActionListener
+public class LifeModel implements ActionListener
 {
 
 	/*
@@ -23,6 +22,7 @@ public class LifeModel extends JPanel implements ActionListener
 	
 	LifeView myView;
 	Timer timer;
+	Life life;
 
 	/** Construct a new model using a particular file */
 	public LifeModel(LifeView view, String fileName) throws IOException
@@ -80,22 +80,31 @@ public class LifeModel extends JPanel implements ActionListener
 		timer.restart();
 	}
 
-	// public void randomizeColor(Graphics g){
-	// 	super.paintComponent(g);
-	// 	for (int i = 0; i < this.grid.length; i++){
-	// 		for (int j = 0; j < this.grid[0].length; j++){
-	// 			if (this.grid[i][j] != null){
-	// 				if (this.grid[i][j].isAliveNow()){
-	// 					int red = (int) Math.random() * 256;
-	// 					int green = (int) Math.random() * 256;
-	// 					int blue = (int) Math.random() * 256;
-	// 					g.setColor(new Color(red, green, blue));
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	myView.updateView(grid);
-	// }
+	public void randomizeColor(Graphics g){
+		if (this.life != null && this.life.getColorStatus()){
+			for (int r = 0; r < SIZE; r++){
+				for (int c = 0; c < SIZE; c++){
+					if (grid[r][c].isAliveNow()){
+						int red = (int) (Math.random() * 256);
+						int green = (int) (Math.random() * 256);
+						int blue = (int) (Math.random() * 256);
+						g.setColor(new Color(red, green, blue));
+					}
+				}
+			}
+			myView.updateView(this.grid);
+		}
+		else if (this.life != null && !this.life.getColorStatus()){
+			for (int r = 0; r < SIZE; r++){
+				for (int c = 0; c < SIZE; c++){
+					if (grid[r][c].isAliveNow()){
+						g.setColor(Color.BLUE);
+					}
+				}
+			}
+			myView.updateView(this.grid);
+		}
+	}
 
 	/** Reset the simulation by placing cells in random locations once again */
 	public void resetSimulation() throws IOException{
@@ -150,14 +159,6 @@ public class LifeModel extends JPanel implements ActionListener
 	/** main logic method for updating the state of the grid / simulation */
 	private void oneGeneration()
 	{
-		// If an occupied(isAliveNow = true) cell has 0, 1, 4, 5, 6, 7, or 8 occupied(isAliveNow = true) neighbors, 
-		// the organism dies(setAliveNext(false)) (0 or 1 neighbor(s), it dies of loneliness; 4 to 8 of overcrowding). 
-		
-		// If an occupied(isAliveNow = true) cell has two or three neighbors(isAliveNow = true), 
-			// the organism survives to the next generation. (setAliveNext(true))
-
-		// If an unoccupied(isAliveNow = false) cell has three occupied(isAliveNow = true) neighbors, it becomes occupied(setAliveNext(true))
-
 		for (int x = 0; x < this.grid.length; x++){
 			for (int y = 0; y < this.grid[0].length; y++){
 				int neighbors = this.getNumNeighbors(x, y);
